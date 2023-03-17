@@ -20,7 +20,7 @@ all:
 	docker build -t $(BUILD_IMAGE) -f builder.Dockerfile .
 	docker run --name $(BUILD_CONTAINER) \
 		-v $(CURDIR)/../:/src/zeek -w /src/zeek \
-		$(BUILD_IMAGE) bash -xeu -c "./configure $(ZEEK_CONFIGURE_FLAGS) && ninja -C $(BUILD_DIR) install"
+		$(BUILD_IMAGE) bash -xeu -c "git config --global --add safe.directory '*' && ./configure $(ZEEK_CONFIGURE_FLAGS) && ninja -C $(BUILD_DIR) install"
 	docker commit $(BUILD_CONTAINER) zeek-build
 	docker build -t $(ZEEK_IMAGE) -f final.Dockerfile .
 	docker tag $(ZEEK_IMAGE) zeek:latest
